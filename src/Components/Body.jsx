@@ -1,4 +1,4 @@
-﻿// Home Page Component - Main news feed with search, categories, and pagination
+// Home Page Component - Main news feed with search, categories, and pagination
 import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 
@@ -136,7 +136,7 @@ const Body = () => {
                                     onClick={() => toggleBookmark(post)}
                                     aria-label="Bookmark"
                                 >
-                                    {isBookmarked(post) ? '' : ''}
+                                    {isBookmarked(post) ? '🔖' : '📑'}
                                 </button>
                             </div>
 
@@ -182,4 +182,3 @@ const Body = () => {
 };
 
 export default Body;
-
