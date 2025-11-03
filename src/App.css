@@ -600,8 +600,8 @@ body.dark-mode {
 
   .menuIcon {
     display: flex;
-    order: 1;
-    /* left */
+    order: 0;
+    /* ensure hamburger stays at the left-end on mobile */
   }
 
   .theme-toggle {
