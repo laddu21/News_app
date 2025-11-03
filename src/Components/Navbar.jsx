@@ -63,6 +63,17 @@ const Navbar = ({ toggleDarkMode, darkMode }) => {
                         {darkMode ? '☀️ Light' : '🌙 Dark'}
                     </button>
                 </div>
+
+                {/* Desktop-only theme toggle on the navbar */}
+                <div className="nav-actions">
+                    <button
+                        className="theme-toggle theme-toggle-desktop"
+                        onClick={toggleDarkMode}
+                        aria-label="Toggle dark mode"
+                    >
+                        {darkMode ? '☀️' : '🌙'}
+                    </button>
+                </div>
             </div>
         </nav>
     );

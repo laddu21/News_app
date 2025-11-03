@@ -562,6 +562,11 @@ body.dark-mode {
     justify-content: space-between;
   }
 
+  /* Hide desktop action area on mobile */
+  .nav-actions {
+    display: none;
+  }
+
   .logo {
     font-size: 1.2rem;
     margin-left: auto;
@@ -652,6 +657,11 @@ body.dark-mode {
     padding: 0.6rem 1rem;
     font-size: 0.9rem;
   }
+}
+
+/* Desktop theme toggle visibility */
+.theme-toggle-desktop {
+  display: inline-block;
 }
 
 /* Tablet Styles */
