@@ -22,14 +22,20 @@ export default async function handler(req, res) {
     const API_KEY = process.env.NEWS_API_KEY || process.env.REACT_APP_NEWS_API_KEY;
 
     if (!API_KEY) {
-        console.error('API key missing. Available env vars:', Object.keys(process.env).filter(k => k.includes('API')));
-        return res.status(500).json({ error: 'API key not configured' });
+        console.error('API key missing. Available env vars:', Object.keys(process.env));
+        return res.status(500).json({
+            error: 'API key not configured',
+            hint: 'Please set NEWS_API_KEY or REACT_APP_NEWS_API_KEY in Vercel environment variables',
+            availableEnvVars: Object.keys(process.env).filter(k => k.includes('API') || k.includes('NEWS'))
+        });
     }
 
     try {
         // Build NewsAPI URL
         const baseUrl = 'https://newsapi.org/v2';
         const apiEndpoint = endpoint || 'top-headlines';
+
+        console.log('Making request to NewsAPI:', apiEndpoint, 'with params:', params);
         const url = new URL(`${baseUrl}/${apiEndpoint}`);
 
         // Add all query params
@@ -44,10 +50,14 @@ export default async function handler(req, res) {
         const response = await fetch(url.toString());
         const data = await response.json();
 
+        console.log('NewsAPI response status:', response.status);
+
         if (!response.ok) {
+            console.error('NewsAPI error:', data);
             return res.status(response.status).json(data);
         }
 
+        console.log('NewsAPI success, returning', data.totalResults || 0, 'articles');
         // Return the data
         res.status(200).json(data);
     } catch (error) {
