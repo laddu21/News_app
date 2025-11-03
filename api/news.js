@@ -1,5 +1,6 @@
 // Vercel Serverless Function - News API Proxy
 // This proxies requests to NewsAPI.org from the server-side to bypass CORS and production restrictions
+// Updated: Environment variable configured in Vercel
 
 export default async function handler(req, res) {
     // Enable CORS
