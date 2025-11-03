@@ -1,0 +1,74 @@
+/**
+ * Navbar Component
+ * 
+ * Responsive navigation bar with the following features:
+ * - Full-width design spanning the entire screen
+ * - Links to all sections of the app
+ * - Dark mode toggle button
+ * - Hamburger menu for mobile devices
+ * - Sticky positioning for easy access while scrolling
+ * 
+ * Props:
+ * @param {Function} toggleDarkMode - Function to toggle dark/light theme
+ * @param {boolean} darkMode - Current theme state
+ */
+
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+
+const Navbar = ({ toggleDarkMode, darkMode }) => {
+    // State to manage mobile menu open/closed state
+    const [open, setOpen] = useState(false);
+
+    return (
+        <nav className="nav">
+            <div className="nav-content">
+                {/* Logo/Brand */}
+                <div className="logo">📰 NewsBlog</div>
+
+                {/* Navigation menu - toggles open on mobile */}
+                <div className={`menu${open ? ' open' : ''}`}>
+                    <Link to="/" onClick={() => setOpen(false)}>
+                        Home
+                    </Link>
+                    <Link to="/telugu-news" onClick={() => setOpen(false)}>
+                        Telugu News
+                    </Link>
+                    <Link to="/world" onClick={() => setOpen(false)}>
+                        World
+                    </Link>
+                    <Link to="/tech" onClick={() => setOpen(false)}>
+                        Tech
+                    </Link>
+                    <Link to="/sports" onClick={() => setOpen(false)}>
+                        Sports
+                    </Link>
+                    <Link to="/bookmarks" onClick={() => setOpen(false)}>
+                        Bookmarks
+                    </Link>
+                </div>
+
+                {/* Right side actions: theme toggle and mobile menu icon */}
+                <div className="nav-actions">
+                    {/* Dark mode toggle button */}
+                    <button
+                        className="theme-toggle"
+                        onClick={toggleDarkMode}
+                        aria-label="Toggle dark mode"
+                    >
+                        {darkMode ? '☀️' : '🌙'}
+                    </button>
+
+                    {/* Hamburger menu icon for mobile */}
+                    <div className="menuIcon" onClick={() => setOpen(!open)}>
+                        <div className="bar"></div>
+                        <div className="bar"></div>
+                        <div className="bar"></div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    );
+};
+
+export default Navbar;
