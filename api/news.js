@@ -18,9 +18,11 @@ export default async function handler(req, res) {
     }
 
     const { endpoint, ...params } = req.query;
-    const API_KEY = process.env.REACT_APP_NEWS_API_KEY;
+    // Try both REACT_APP_NEWS_API_KEY and NEWS_API_KEY for compatibility
+    const API_KEY = process.env.NEWS_API_KEY || process.env.REACT_APP_NEWS_API_KEY;
 
     if (!API_KEY) {
+        console.error('API key missing. Available env vars:', Object.keys(process.env).filter(k => k.includes('API')));
         return res.status(500).json({ error: 'API key not configured' });
     }
 
