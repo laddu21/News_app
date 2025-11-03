@@ -91,7 +91,7 @@ After deployment, add your News API key:
 2. Click: **Settings** → **Environment Variables**
 3. Add new variable:
    - **Name**: `REACT_APP_NEWS_API_KEY`
-   - **Value**: `fb3bba8b049e4cd2ba39389e71851f02`
+   - **Value**: `<your_newsapi_key>`
    - **Environment**: Select all (Production, Preview, Development)
 4. Click: **Save**
 5. Redeploy your app (Vercel → Deployments → Click "..." → Redeploy)

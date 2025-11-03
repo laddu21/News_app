@@ -13,8 +13,10 @@
  */
 
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Bookmarks = () => {
+    const navigate = useNavigate();
     // State management
     const [bookmarks, setBookmarks] = useState([]); // Array of bookmarked articles
 
@@ -59,6 +61,7 @@ const Bookmarks = () => {
         setBookmarks(updated);
         // Notify other components (like Body, Sports, etc.)
         window.dispatchEvent(new Event('bookmarkUpdate'));
+        window.dispatchEvent(new CustomEvent('toast', { detail: 'removed from book mark' }));
     };
 
     /**
@@ -73,6 +76,7 @@ const Bookmarks = () => {
             setBookmarks([]);
             // Notify other components
             window.dispatchEvent(new Event('bookmarkUpdate'));
+            window.dispatchEvent(new CustomEvent('toast', { detail: 'removed from book mark' }));
         }
     };
 
@@ -80,6 +84,7 @@ const Bookmarks = () => {
         <div className="body-container">
             {/* Header with Title and Clear All Button */}
             <div className="bookmarks-header">
+                <button className="back-btn" onClick={() => navigate(-1)} aria-label="Go back">← Back</button>
                 <h1 className="page-title">🔖 Bookmarked Articles</h1>
                 {/* Only show Clear All button if there are bookmarks */}
                 {bookmarks.length > 0 && (

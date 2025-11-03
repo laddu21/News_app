@@ -13,6 +13,7 @@
 import { Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Navbar from "./Components/Navbar";
+import Toast from "./Components/Toast";
 import Body from "./Components/Body";
 import Sports from "./Components/Sports";
 import TeluguNews from "./Components/TeluguNews";
@@ -51,6 +52,8 @@ const App = () => {
     <div className={darkMode ? 'app dark-mode' : 'app'}>
       {/* Navigation bar with dark mode toggle */}
       <Navbar toggleDarkMode={toggleDarkMode} darkMode={darkMode} />
+      {/* Global toast */}
+      <Toast />
 
       {/* Application routes */}
       <Routes>

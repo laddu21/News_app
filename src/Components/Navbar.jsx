@@ -23,7 +23,14 @@ const Navbar = ({ toggleDarkMode, darkMode }) => {
     return (
         <nav className="nav">
             <div className="nav-content">
-                {/* Logo/Brand */}
+                {/* Mobile menu icon - left on mobile */}
+                <div className="menuIcon" onClick={() => setOpen(!open)} aria-label="Toggle menu">
+                    <div className="bar"></div>
+                    <div className="bar"></div>
+                    <div className="bar"></div>
+                </div>
+
+                {/* Title / Brand - right on mobile */}
                 <div className="logo">📰 NewsBlog</div>
 
                 {/* Navigation menu - toggles open on mobile */}
@@ -46,25 +53,15 @@ const Navbar = ({ toggleDarkMode, darkMode }) => {
                     <Link to="/bookmarks" onClick={() => setOpen(false)}>
                         Bookmarks
                     </Link>
-                </div>
 
-                {/* Right side actions: theme toggle and mobile menu icon */}
-                <div className="nav-actions">
-                    {/* Dark mode toggle button */}
+                    {/* Theme toggle inside menu for mobile */}
                     <button
-                        className="theme-toggle"
-                        onClick={toggleDarkMode}
+                        className="theme-toggle theme-toggle-menu"
+                        onClick={() => { toggleDarkMode(); setOpen(false); }}
                         aria-label="Toggle dark mode"
                     >
-                        {darkMode ? '☀️' : '🌙'}
+                        {darkMode ? '☀️ Light' : '🌙 Dark'}
                     </button>
-
-                    {/* Hamburger menu icon for mobile */}
-                    <div className="menuIcon" onClick={() => setOpen(!open)}>
-                        <div className="bar"></div>
-                        <div className="bar"></div>
-                        <div className="bar"></div>
-                    </div>
                 </div>
             </div>
         </nav>

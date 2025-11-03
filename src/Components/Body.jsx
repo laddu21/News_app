@@ -1,24 +1,10 @@
-﻿/**
- * Body Component (Home Page)
- * 
- * Main landing page displaying news articles with advanced features:
- * - Real-time search across article titles and descriptions
- * - Category filtering (6 categories: general, business, entertainment, health, science, technology)
- * - Pagination for browsing through multiple pages
- * - Bookmark functionality to save articles for later
- * - Responsive design adapting to all screen sizes
- * 
- * Data Source: NewsAPI - US top headlines
- */
-
+﻿// Home Page Component - Main news feed with search, categories, and pagination
 import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 
-// NewsAPI key from environment variables
 const API_KEY = process.env.REACT_APP_NEWS_API_KEY;
 
 const Body = () => {
-    // State management
     const [posts, setPosts] = useState([]);
     const [filteredPosts, setFilteredPosts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -26,27 +12,34 @@ const Body = () => {
     const [category, setCategory] = useState('general');
     const [page, setPage] = useState(1);
     const [totalResults, setTotalResults] = useState(0);
+    const [apiKeyMissing, setApiKeyMissing] = useState(!API_KEY);
     const pageSize = 10;
 
-    const categories = ['general', 'business', 'entertainment', 'health', 'science', 'technology'];
+    const categories = ['general', 'business', 'entertainment', 'health', 'science', 'technology', 'sports'];
 
     const fetchNews = useCallback(async () => {
+        if (!API_KEY) {
+            setLoading(false);
+            setApiKeyMissing(true);
+            return;
+        }
+
         setLoading(true);
         try {
-            const res = await axios.get(+"https://newsapi.org/v2/top-headlines"+, {
+            const res = await axios.get('https://newsapi.org/v2/top-headlines', {
                 params: {
                     country: 'us',
-                    category: category,
-                    pageSize: pageSize,
-                    page: page,
+                    category,
+                    pageSize,
+                    page,
                     apiKey: API_KEY
                 }
             });
             setPosts(res.data.articles || []);
             setTotalResults(res.data.totalResults || 0);
-            setLoading(false);
         } catch (error) {
             console.error('Error fetching news:', error);
+        } finally {
             setLoading(false);
         }
     }, [category, page]);
@@ -78,11 +71,14 @@ const Body = () => {
         if (isBookmarked) {
             const updated = bookmarks.filter(b => b.url !== post.url);
             localStorage.setItem('bookmarks', JSON.stringify(updated));
+            window.dispatchEvent(new Event('bookmarkUpdate'));
+            window.dispatchEvent(new CustomEvent('toast', { detail: 'removed from book mark' }));
         } else {
             bookmarks.push(post);
             localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+            window.dispatchEvent(new Event('bookmarkUpdate'));
+            window.dispatchEvent(new CustomEvent('toast', { detail: 'added to book mark' }));
         }
-        window.dispatchEvent(new Event('bookmarkUpdate'));
     };
 
     const isBookmarked = (post) => {
@@ -90,26 +86,26 @@ const Body = () => {
         return bookmarks.some(b => b.url === post.url);
     };
 
-    if (loading) return <div className='body-container'><div className='loader'>Loading...</div></div>;
+    if (loading) return <div className="body-container"><div className="loader">Loading...</div></div>;
 
     const displayPosts = filteredPosts.length > 0 || searchTerm ? filteredPosts : posts;
 
     return (
-        <div className='body-container'>
-            <div className='controls'>
+        <div className="body-container">
+            <div className="controls">
                 <input
-                    type='text'
-                    placeholder=' Search news...'
+                    type="text"
+                    placeholder=" Search news..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className='search-input'
+                    className="search-input"
                 />
-                
-                <div className='category-pills'>
+
+                <div className="category-pills">
                     {categories.map(cat => (
                         <button
                             key={cat}
-                            className={+"category-pill "+}
+                            className={'category-pill ' + (category === cat ? 'active' : '')}
                             onClick={() => {
                                 setCategory(cat);
                                 setPage(1);
@@ -121,56 +117,62 @@ const Body = () => {
                 </div>
             </div>
 
+            {apiKeyMissing && (
+                <div className="api-key-warning">
+                    <strong>API key not configured.</strong> To see live headlines, set REACT_APP_NEWS_API_KEY in your .env (local) and in your Vercel project settings for production.
+                </div>
+            )}
+
             {displayPosts.length === 0 ? (
-                <div className='no-results'>No articles found</div>
+                <div className="no-results">No articles found</div>
             ) : (
                 <>
                     {displayPosts.map((post, idx) => (
-                        <div className='blog-post' key={idx}>
-                            <div className='post-header'>
+                        <div className="blog-post" key={idx}>
+                            <div className="post-header">
                                 <h2>{post.title}</h2>
                                 <button
-                                    className={+"ookmark-btn "+}
+                                    className={'bookmark-btn ' + (isBookmarked(post) ? 'bookmarked' : '')}
                                     onClick={() => toggleBookmark(post)}
-                                    aria-label='Bookmark'
+                                    aria-label="Bookmark"
                                 >
                                     {isBookmarked(post) ? '' : ''}
                                 </button>
                             </div>
-                            
-                            <div className='meta'>
-                                <span>By {post.author || 'Unknown'}</span> | <span>{post.publishedAt?.slice(0, 10)}</span>
+
+                            <div className="meta">
+                                <span>By {post.author || "Unknown"}</span> | <span>{post.publishedAt?.slice(0, 10)}</span>
                             </div>
-                            
+
                             <p>{post.description}</p>
-                            
+
                             {post.urlToImage && (
-                                <img src={post.urlToImage} alt='news' className='post-image' />
+                                <img src={post.urlToImage} alt="news" className="post-image" />
                             )}
-                            
+
                             <div>
-                                <a href={post.url} target='_blank' rel='noopener noreferrer' className='read-more'>
-                                    Read more 
+                                <a href={post.url} target="_blank" rel="noopener noreferrer" className="read-more">
+                                    Read more
                                 </a>
                             </div>
                         </div>
                     ))}
 
-                    <div className='pagination'>
+                    <div className="pagination">
                         <button
                             onClick={() => setPage(p => Math.max(1, p - 1))}
                             disabled={page === 1}
-                            className='pagination-btn'
+                            className="pagination-btn"
                         >
-                             Previous
+                            Previous
                         </button>
-                        <span className='page-info'>Page {page}</span>
+                        <span className="page-info">Page {page}</span>
                         <button
                             onClick={() => setPage(p => p + 1)}
                             disabled={page * pageSize >= totalResults}
-                            className='pagination-btn'
+                            className="pagination-btn"
                         >
-                            Next 
+                            Next
                         </button>
                     </div>
                 </>
@@ -180,3 +182,4 @@ const Body = () => {
 };
 
 export default Body;
+

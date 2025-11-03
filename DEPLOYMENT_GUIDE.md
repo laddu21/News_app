@@ -57,8 +57,8 @@ Your app is now ready for deployment! All required files have been created:
 
 6. **Add Environment Variables** (Important!):
    - Click **"Environment Variables"**
-   - Add: `REACT_APP_NEWS_API_KEY` = `fb3bba8b049e4cd2ba39389e71851f02`
-   - This keeps your API key secure
+   - Add: `REACT_APP_NEWS_API_KEY` = `<your_newsapi_key>`
+   - This keeps your API key secure (do NOT commit it to source control)
 
 7. Click **"Deploy"**
 8. Wait 2-3 minutes for deployment to complete
@@ -109,7 +109,7 @@ After deployment, add your API key as an environment variable:
 2. Click **"Settings"** → **"Environment Variables"**
 3. Add:
    - **Name**: `REACT_APP_NEWS_API_KEY`
-   - **Value**: `fb3bba8b049e4cd2ba39389e71851f02`
+   - **Value**: `<your_newsapi_key>`
    - **Environment**: Production, Preview, Development (select all)
 4. Click **"Save"**
 5. **Redeploy** your app for changes to take effect
@@ -118,14 +118,9 @@ After deployment, add your API key as an environment variable:
 
 To use environment variables instead of hardcoded API keys, update your components:
 
-Replace:
+Example usage in code:
 ```javascript
-const API_KEY = 'fb3bba8b049e4cd2ba39389e71851f02';
-```
-
-With:
-```javascript
-const API_KEY = process.env.REACT_APP_NEWS_API_KEY || 'fb3bba8b049e4cd2ba39389e71851f02';
+const API_KEY = process.env.REACT_APP_NEWS_API_KEY;
 ```
 
 ---
