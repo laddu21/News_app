@@ -2,8 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-const API_KEY = process.env.REACT_APP_NEWS_API_KEY;
-
 const Tech = () => {
     const [articles, setArticles] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -17,13 +15,14 @@ const Tech = () => {
         setLoading(true);
         setError(null);
         try {
-            const res = await axios.get('https://newsapi.org/v2/top-headlines', {
+            // Use Vercel serverless function proxy
+            const res = await axios.get('/api/news', {
                 params: {
+                    endpoint: 'top-headlines',
                     category: 'technology',
                     country: 'us',
-                    pageSize: 20,
-                    apiKey: API_KEY,
-                },
+                    pageSize: 20
+                }
             });
 
             if (res.data.status !== 'ok') {

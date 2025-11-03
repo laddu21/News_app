@@ -2,8 +2,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 
-const API_KEY = process.env.REACT_APP_NEWS_API_KEY;
-
 const TeluguNews = () => {
     const [articles, setArticles] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -18,14 +16,15 @@ const TeluguNews = () => {
                 ? 'Telangana OR Hyderabad'
                 : 'Andhra Pradesh OR Amaravati OR Visakhapatnam';
 
-            const res = await axios.get('https://newsapi.org/v2/everything', {
+            // Use Vercel serverless function proxy
+            const res = await axios.get('/api/news', {
                 params: {
+                    endpoint: 'everything',
                     q: searchQuery,
                     language: 'en',
                     sortBy: 'publishedAt',
-                    pageSize: 20,
-                    apiKey: API_KEY,
-                },
+                    pageSize: 20
+                }
             });
 
             if (res.data.status !== 'ok') {
